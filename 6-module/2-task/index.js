@@ -4,7 +4,13 @@ export default class ProductCard {
   constructor(product) {
     this.product = product;
     this.render();
-    this.addEventListener();
+    this.elem.addEventListener('click', (event) => {
+      let prodAdd = new CustomEvent("product-add", {
+        detail: this.product.id,
+        bubbles: true
+      });
+      this.elem.dispatchEvent(prodAdd);
+    });
   }
 
   render() {
@@ -18,7 +24,7 @@ export default class ProductCard {
         <span class="card__price">€${this.product.price.toFixed(2)}</span>
       </div>
       <div class="card__body">
-        <div class="card__title">${escapeHtml(this.product.name)}</div>
+        <div class="card__title">${this.product.name}</div>
         <button type="button" class="card__button">
           <img src="/assets/images/icons/plus-icon.svg" alt="icon" />
         </button>
@@ -26,14 +32,4 @@ export default class ProductCard {
     </div>`);
   }
   
-  addEventListeners() {
-    this.elem.onclick = (event) => this.onClick(event);
-  }
-
-  onClick(event) {
-    this.elem.dispatchEvent(new CustomEvent("product-add", {
-      detail: this.product.id,
-      bubbles: true
-    }));
-  }
 }
